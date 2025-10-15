@@ -2,7 +2,6 @@ package com.example.myjetpack1.di
 
 import com.example.myjetpack1.network.CountryApiService
 import com.example.myjetpack1.network.CurrencyApiService
-import com.example.myjetpack1.network.RandomUserApiService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -70,11 +69,7 @@ object NetworkModule {
             .build()
     }
 
-    @Provides
-    @Singleton
-    fun provideRandomUserApiService(@Named("randomUserRetrofit") retrofit: Retrofit): RandomUserApiService {
-        return retrofit.create(RandomUserApiService::class.java)
-    }
+
 
     @Provides
     @Singleton

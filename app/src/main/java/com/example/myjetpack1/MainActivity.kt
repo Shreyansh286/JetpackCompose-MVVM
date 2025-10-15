@@ -14,9 +14,9 @@ import androidx.navigation.navArgument
 import com.example.myjetpack1.model.CountryDataItem
 import com.example.myjetpack1.ui.NavRoutes
 import com.example.myjetpack1.ui.screens.CountryScreen
+import com.example.myjetpack1.ui.screens.FiatListScreen
 import com.example.myjetpack1.ui.screens.SettingScreen
 import com.example.myjetpack1.ui.screens.UnitListScreen
-import com.example.myjetpack1.ui.screens.UserDetailScreen
 import com.example.myjetpack1.ui.theme.MyJetpack1Theme
 import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
@@ -42,26 +42,19 @@ fun AppNavigation() {
         composable(NavRoutes.COUNTRY_LIST) {
             CountryScreen(navController = navController)
         }
-
-
         composable(
             route = NavRoutes.SETTING_ROUTE,
-            // 1. Define the argument as a simple String
             arguments = listOf(navArgument("countryDataJson") { type = NavType.StringType })
         ) { backStackEntry ->
-            // 2. Retrieve the JSON string from the arguments
+            // Retrieve the JSON string from the arguments
             val json = backStackEntry.arguments?.getString("countryDataJson")
 
-            // 3. Decode the JSON string back to a CountryDataItem object
+            // Decode the JSON string back to a CountryDataItem object
             val selectedCountryData = json?.let {
                 Gson().fromJson(it, CountryDataItem::class.java)
             }
 
-            // 4. Pass the object to your screen
-           /* SettingScreen(
-                selectedCountryData = selectedCountryData,
-                onNavigateBack = { navController.popBackStack() }
-            )*/
+            //Pass the object to screen
             SettingScreen(
                 navController = navController, // <-- Pass NavController
                 selectedCountryData = selectedCountryData,
@@ -71,6 +64,10 @@ fun AppNavigation() {
 
         composable(NavRoutes.UNIT_LIST) {
             UnitListScreen(navController = navController)
+        }
+
+        composable(NavRoutes.FIAT_LIST) {
+            FiatListScreen(navController = navController)
         }
 
     }

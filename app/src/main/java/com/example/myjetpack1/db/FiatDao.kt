@@ -9,7 +9,7 @@ import com.example.myjetpack1.model.CurrencyResponse
 import com.example.myjetpack1.model.Data
 
 @Dao
-interface CurrencyDao {
+interface FiatDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAll(currency: List<Data>)
 
@@ -18,5 +18,4 @@ interface CurrencyDao {
 
     @Query("SELECT * FROM currency WHERE currencyName LIKE :searchCurrency")
     suspend fun searchCurrency(searchCurrency: String): List<Data>
-
 }

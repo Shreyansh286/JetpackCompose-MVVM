@@ -1,4 +1,5 @@
 package com.example.myjetpack1.ui.screens
+
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -10,6 +11,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
@@ -43,14 +45,14 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.myjetpack1.model.Data
-import com.example.myjetpack1.ui.NavRoutes.SELECTED_UNIT_KEY
-import com.example.myjetpack1.viewmodel.CurrencyViewModel
+import com.example.myjetpack1.ui.NavRoutes.SELECTED_FIAT_KEY
+import com.example.myjetpack1.viewmodel.FiatViewModel
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterialApi::class)
 @Composable
-fun UnitListScreen(
+fun FiatListScreen(
     navController: NavController,
-    viewModel: CurrencyViewModel = hiltViewModel<CurrencyViewModel>()
+    viewModel: FiatViewModel = hiltViewModel<FiatViewModel>()
 ) {
     val currency by viewModel.currency.collectAsState()
     val isLoading by viewModel.isLoading.collectAsState()
@@ -60,7 +62,6 @@ fun UnitListScreen(
         refreshing = isLoading,
         onRefresh = { viewModel.loadCurrency(forceRefresh = true) })
 
-
     LaunchedEffect(Unit) {
         viewModel.loadCurrency()
     }
@@ -69,10 +70,14 @@ fun UnitListScreen(
         containerColor = Color.Black,
         topBar = {
             TopAppBar(
-                title = { Text("Select Unit") },
+                title = { Text("Select Fiat Currency") },
                 navigationIcon = {
                     IconButton(onClick = { navController.popBackStack() }) {
-                        Icon(Icons.Default.ArrowBack, contentDescription = "Back", tint = Color.White)
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                            contentDescription = "Back",
+                            tint = Color.White
+                        )
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
@@ -98,7 +103,8 @@ fun UnitListScreen(
                 placeholder = { Text("Search", color = Color.Gray) },
             )
 
-            Box(Modifier.pullRefresh(pullRefreshState).fillMaxSize()) {
+            Box(Modifier
+                .pullRefresh(pullRefreshState).fillMaxSize()) {
                 if (isLoading && currency.isEmpty()) {
                     CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
                 } else if (error != null) {
@@ -121,11 +127,11 @@ fun UnitListScreen(
                 } else {
                     LazyColumn {
                         items(currency) { currency ->
-                            CurrencyListItem(currencyData = currency) {
+                            FiatCurrencyListItem(currencyData = currency) {
                                 // Save the selected currency code on the previous screen's state handle
                                 navController.previousBackStackEntry
                                     ?.savedStateHandle
-                                    ?.set(SELECTED_UNIT_KEY, currency.currencyCode.toString())
+                                    ?.set(SELECTED_FIAT_KEY, currency.currencyCode.toString())
                                 // Navigate back to the previous screen
                                 navController.popBackStack()
                             }
@@ -136,7 +142,7 @@ fun UnitListScreen(
                 PullRefreshIndicator(
                     isLoading,
                     pullRefreshState,
-                    Modifier.align(Alignment.TopCenter)
+                    Modifier.align(Alignment.Center)
                 )
             }
         }
@@ -144,7 +150,7 @@ fun UnitListScreen(
 }
 
 @Composable
-fun CurrencyListItem(currencyData: Data, onClick: () -> Unit) {
+fun FiatCurrencyListItem(currencyData: Data, onClick: () -> Unit) {
     Row(
         modifier = Modifier
             .fillMaxWidth()

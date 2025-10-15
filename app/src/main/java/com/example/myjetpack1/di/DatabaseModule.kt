@@ -5,8 +5,7 @@ import androidx.room.Room
 import com.example.myjetpack1.db.AppDatabase
 import com.example.myjetpack1.db.CountryDao
 import com.example.myjetpack1.db.CurrencyDao
-import com.example.myjetpack1.db.RemoteKeysDao
-import com.example.myjetpack1.db.UserDao
+import com.example.myjetpack1.db.FiatDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -30,15 +29,6 @@ object DatabaseModule {
         .build()
     }
 
-    @Provides
-    fun provideUserDao(appDatabase: AppDatabase): UserDao {
-        return appDatabase.userDao()
-    }
-
-    @Provides
-    fun provideRemoteKeysDao(appDatabase: AppDatabase): RemoteKeysDao {
-        return appDatabase.remoteKeysDao()
-    }
 
     @Provides
     fun provideCountryDao(appDatabase: AppDatabase): CountryDao {
@@ -48,5 +38,10 @@ object DatabaseModule {
     @Provides
     fun provideCurrencyDao(appDatabase: AppDatabase): CurrencyDao {
         return appDatabase.currencyDao()
+    }
+
+    @Provides
+    fun provideFiatDao(appDatabase: AppDatabase): FiatDao {
+        return appDatabase.fiatDao()
     }
 }

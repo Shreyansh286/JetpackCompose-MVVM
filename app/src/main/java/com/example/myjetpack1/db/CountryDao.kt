@@ -17,6 +17,4 @@ interface CountryDao {
     @Query("SELECT * FROM countries WHERE shortName LIKE :searchQuery")
     suspend fun searchCountries(searchQuery: String): List<CountryDataItem>
 
-    @Query("DELETE FROM countries")
-    suspend fun clearAll()
 }

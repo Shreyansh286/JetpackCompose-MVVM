@@ -4,6 +4,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -82,7 +83,7 @@ fun CountryScreen(
             )
         },
     ) { paddingValues ->
-        Column(modifier = Modifier.padding(paddingValues)) {
+        Column(modifier = Modifier.padding(paddingValues).fillMaxSize()) {
             OutlinedTextField(
                 value = searchText,
                 onValueChange = {
@@ -98,7 +99,7 @@ fun CountryScreen(
                 placeholder = { Text("Search", color = Color.Gray) },
             )
 
-            Box(Modifier.pullRefresh(pullRefreshState)) {
+            Box(Modifier.pullRefresh(pullRefreshState).fillMaxSize()) {
                 if (isLoading && countries.isEmpty()) {
                     CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
                 } else if (error != null) {
@@ -131,7 +132,7 @@ fun CountryScreen(
                 PullRefreshIndicator(
                     isLoading,
                     pullRefreshState,
-                    Modifier.align(Alignment.TopCenter)
+                    Modifier.align(Alignment.Center)
                 )
             }
         }

@@ -42,6 +42,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.myjetpack1.model.CountryDataItem
 import com.example.myjetpack1.ui.NavRoutes
+import com.example.myjetpack1.ui.NavRoutes.SELECTED_FIAT_KEY
 import com.example.myjetpack1.ui.NavRoutes.SELECTED_UNIT_KEY
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -52,16 +53,31 @@ fun SettingScreen(
     onNavigateBack: () -> Unit
 ) {
     var selectedUnit by remember { mutableStateOf("SATS") }
+    var selectedFiat by remember { mutableStateOf(selectedCountryData?.currencyCode) }
+
     // Observe the result from UnitListScreen
     val unitResult = navController.currentBackStackEntry
         ?.savedStateHandle
         ?.get<String>(SELECTED_UNIT_KEY)
-    // Update the state when a new value is received
+
+    // Observe the result from FiatListScreen
+    val fiatResult = navController.currentBackStackEntry
+        ?.savedStateHandle
+        ?.get<String>(SELECTED_FIAT_KEY)
+    // Update the state when a new Unit value is received
     LaunchedEffect(unitResult) {
         unitResult?.let {
             selectedUnit = it // Update the state with the new value
             // Clean up the handle so it doesn't trigger again on configuration change
             navController.currentBackStackEntry?.savedStateHandle?.remove<String>(SELECTED_UNIT_KEY)
+        }
+    }
+    // Update the state when a new Fiat value is received
+    LaunchedEffect(fiatResult) {
+        fiatResult?.let {
+            selectedFiat = it // Update the state with the new value
+            // Clean up the handle so it doesn't trigger again on configuration change
+            navController.currentBackStackEntry?.savedStateHandle?.remove<String>(SELECTED_FIAT_KEY)
         }
     }
     Scaffold(
@@ -105,12 +121,15 @@ fun SettingScreen(
                 title = "Fiat currency",
                 icon = Icons.Default.MonetizationOn,
                 // Use the preferred currency from the passed object, or "INR" as a fallback
-                selectedValue = selectedCountryData?.currencyCode ?: "INR",
-                onClick = { /* Handle Fiat currency click */ }
+                selectedValue = selectedFiat.toString(),
+                onClick = {
+                    /* Handle Fiat currency click */
+                    navController.navigate(NavRoutes.FIAT_LIST)
+                }
             )
 
             SettingNavigationCard(
-                title = "Change account name",
+                title = "Currency Conversation ",
                 icon = Icons.Default.AccountCircle,
                 onClick = { /* Handle Change account name click */ }
             )
