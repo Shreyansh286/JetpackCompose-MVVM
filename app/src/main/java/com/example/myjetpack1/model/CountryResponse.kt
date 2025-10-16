@@ -17,16 +17,16 @@ data class CountryResponse(
 @Entity(tableName = "countries")
 data class CountryDataItem(
 	@PrimaryKey
-	@SerializedName("id") // Good practice to be explicit
+	@SerializedName("id")
 	val id: Int,
 
-	@SerializedName("short_name") // This tells Gson to map "short_name" from JSON to this property
+	@SerializedName("short_name")
 	val shortName: String?,
 
 	@SerializedName("country_flag")
 	val countryFlag: String?,
 
-	@SerializedName("iso_2") // Even if names match, being explicit can prevent issues
+	@SerializedName("iso_2")
 	val iso2: String?,
 
 	@SerializedName("currency_code")

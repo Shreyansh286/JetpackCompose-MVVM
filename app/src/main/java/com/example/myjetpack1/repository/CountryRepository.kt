@@ -14,28 +14,29 @@ class CountryRepository @Inject constructor(
     private val countryDao: CountryDao
 ) {
 
-    fun getCountries(searchQuery: String, forceRefresh: Boolean): Flow<List<CountryDataItem>> = flow {
-        val cachedCountries = if (searchQuery.isBlank()) {
-            countryDao.getAllCountries()
-        } else {
-            countryDao.searchCountries("%$searchQuery%")
-        }
+    fun getCountries(searchQuery: String, forceRefresh: Boolean): Flow<List<CountryDataItem>> =
+        flow {
+            val cachedCountries = if (searchQuery.isBlank()) {
+                countryDao.getAllCountries()
+            } else {
+                countryDao.searchCountries("%$searchQuery%")
+            }
 
-        if (cachedCountries.isNotEmpty() && !forceRefresh) {
-            emit(cachedCountries)
-        } else {
-            try {
-                val remoteCountries = countryApiService.getCountries()
-                countryDao.insertAll(remoteCountries.data)
-                emit(countryDao.getAllCountries())
-            } catch (e: Exception) {
-                // If API fails, emit cached data if available, otherwise throw error
-                if (cachedCountries.isNotEmpty()) {
-                    emit(cachedCountries)
-                } else {
-                    throw e
+            if (cachedCountries.isNotEmpty() && !forceRefresh) {
+                emit(cachedCountries)
+            } else {
+                try {
+                    val remoteCountries = countryApiService.getCountries()
+                    countryDao.insertAll(remoteCountries.data)
+                    emit(countryDao.getAllCountries())
+                } catch (e: Exception) {
+                    // If API fails, emit cached data if available, otherwise throw error
+                    if (cachedCountries.isNotEmpty()) {
+                        emit(cachedCountries)
+                    } else {
+                        throw e
+                    }
                 }
             }
         }
-    }
 }

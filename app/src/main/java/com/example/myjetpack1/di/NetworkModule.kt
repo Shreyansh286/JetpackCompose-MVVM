@@ -58,7 +58,6 @@ object NetworkModule {
     }
 
 
-
     @Provides
     @Singleton
     fun provideCountryApiService(@Named("countryRetrofit") retrofit: Retrofit): CountryApiService {

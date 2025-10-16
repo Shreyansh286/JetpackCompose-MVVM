@@ -40,6 +40,7 @@ class CurrencyRepository @Inject constructor(
         }
     }
 }
+
 private fun filterCurrency(list: List<Data>): List<Data> {
     return list.filter { it.currencyCode == "BTC" || it.currencyCode == "SATS" }
 }
