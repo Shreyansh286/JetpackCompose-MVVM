@@ -51,7 +51,7 @@ import com.example.myjetpack1.viewmodel.CountryViewModel
 @Composable
 fun CountryScreen(
     navController: NavController,
-    viewModel: CountryViewModel = hiltViewModel()
+    viewModel: CountryViewModel = hiltViewModel<CountryViewModel>()
 ) {
     val countries by viewModel.countries.collectAsState()
     val isLoading by viewModel.isLoading.collectAsState()
@@ -59,11 +59,11 @@ fun CountryScreen(
     val (searchText, setSearchText) = remember { mutableStateOf("") }
     val pullRefreshState = rememberPullRefreshState(
         refreshing = isLoading,
-        onRefresh = { viewModel.loadCountries(forceRefresh = true) })
+        onRefresh = { viewModel.loadCountries(forceRefresh = false) })
 
 
     LaunchedEffect(Unit) {
-        viewModel.loadCountries()
+        viewModel.loadCountries(forceRefresh = false)
     }
 
     Scaffold(
@@ -73,7 +73,7 @@ fun CountryScreen(
                 title = { Text("Select country") },
                 navigationIcon = {
                     IconButton(onClick = { navController.popBackStack() }) {
-                        Icon(Icons.Default.ArrowBack, contentDescription = "Back")
+                        Icon(Icons.Default.ArrowBack, contentDescription = "Back",  tint = Color.White)
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
@@ -100,7 +100,7 @@ fun CountryScreen(
             )
 
             Box(Modifier.pullRefresh(pullRefreshState).fillMaxSize()) {
-                if (isLoading && countries.isEmpty()) {
+                if (isLoading && countries.isEmpty() && pullRefreshState.progress == 0f) {
                     CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
                 } else if (error != null) {
                     Text(
@@ -132,7 +132,7 @@ fun CountryScreen(
                 PullRefreshIndicator(
                     isLoading,
                     pullRefreshState,
-                    Modifier.align(Alignment.Center)
+                    Modifier.align(Alignment.TopCenter)
                 )
             }
         }

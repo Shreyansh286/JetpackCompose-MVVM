@@ -14,7 +14,7 @@ interface CountryDao {
     @Query("SELECT * FROM countries")
     suspend fun getAllCountries(): List<CountryDataItem>
 
-    @Query("SELECT * FROM countries WHERE shortName LIKE :searchQuery")
+    @Query("SELECT * FROM countries WHERE shortName LIKE :searchQuery OR currencyCode LIKE :searchQuery")
     suspend fun searchCountries(searchQuery: String): List<CountryDataItem>
 
 }

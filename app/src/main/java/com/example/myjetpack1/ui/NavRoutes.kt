@@ -10,6 +10,7 @@ object NavRoutes {
     const val SETTING_ROUTE = "setting/{countryDataJson}"
     const val UNIT_LIST = "unitList"
     const val FIAT_LIST = "fiatList"
+    const val ENTER_AMOUNT_ROUTE = "enterAmount/{selectedUnit}/{selectedFiat}"
 
     const val SELECTED_UNIT_KEY = "selected_unit"
     const val SELECTED_FIAT_KEY = "selected_fiat"
@@ -19,5 +20,9 @@ object NavRoutes {
         val json = Gson().toJson(countryData)
         val encodedJson = URLEncoder.encode(json, StandardCharsets.UTF_8.toString())
         return "setting/$encodedJson"
+    }
+
+    fun enterAmountScreen(selectedUnit: String, selectedFiat: String): String {
+        return "enterAmount/$selectedUnit/$selectedFiat"
     }
 }

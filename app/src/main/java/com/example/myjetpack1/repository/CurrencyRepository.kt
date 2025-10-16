@@ -22,21 +22,24 @@ class CurrencyRepository @Inject constructor(
         }
 
         if (cachedCurrency.isNotEmpty() && !forceRefresh) {
-            emit(cachedCurrency)
+            emit(filterCurrency(cachedCurrency))
         } else {
             try {
                 val remoteCurrency = currencyApiService.getCurrency()
-                currencyDao.insertAll(remoteCurrency.data.filter { it.currencyCode == "BTC" || it.currencyCode == "SATS" })
-               // currencyDao.insertAll(remoteCurrency.data)
-                emit(currencyDao.getAllCurrency())
+                currencyDao.insertAll(remoteCurrency.data)
+                emit(filterCurrency(remoteCurrency.data))
+
             } catch (e: Exception) {
                 // If API fails, emit cached data if available, otherwise throw error
                 if (cachedCurrency.isNotEmpty()) {
-                    emit(cachedCurrency)
+                    emit(filterCurrency(cachedCurrency))
                 } else {
                     throw e
                 }
             }
         }
     }
+}
+private fun filterCurrency(list: List<Data>): List<Data> {
+    return list.filter { it.currencyCode == "BTC" || it.currencyCode == "SATS" }
 }

@@ -16,8 +16,6 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
-
-    private const val RANDOM_USER_BASE_URL = "https://randomuser.me/"
     private const val COUNTRY_BASE_URL = "https://raw.githubusercontent.com/"
 
     @Provides
@@ -36,16 +34,6 @@ object NetworkModule {
             .build()
     }
 
-    @Provides
-    @Singleton
-    @Named("randomUserRetrofit")
-    fun provideRandomUserRetrofit(okHttpClient: OkHttpClient): Retrofit {
-        return Retrofit.Builder()
-            .baseUrl(RANDOM_USER_BASE_URL)
-            .client(okHttpClient)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-    }
 
     @Provides
     @Singleton

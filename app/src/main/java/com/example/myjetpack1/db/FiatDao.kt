@@ -16,6 +16,6 @@ interface FiatDao {
     @Query("SELECT * FROM currency")
     suspend fun getAllCurrency(): List<Data>
 
-    @Query("SELECT * FROM currency WHERE currencyName LIKE :searchCurrency")
+    @Query("SELECT * FROM currency WHERE currencyName LIKE :searchCurrency OR currencyCode LIKE :searchCurrency")
     suspend fun searchCurrency(searchCurrency: String): List<Data>
 }

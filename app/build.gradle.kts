@@ -101,5 +101,7 @@ dependencies {
     implementation(libs.androidx.room.paging) // For Paging 3 support
     ksp(libs.androidx.room.compiler)
 
+    implementation("com.google.accompanist:accompanist-systemuicontroller:0.36.0")
+
     implementation("androidx.compose.material:material-icons-extended")
 }

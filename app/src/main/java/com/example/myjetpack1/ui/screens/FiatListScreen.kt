@@ -142,7 +142,7 @@ fun FiatListScreen(
                 PullRefreshIndicator(
                     isLoading,
                     pullRefreshState,
-                    Modifier.align(Alignment.Center)
+                    Modifier.align(Alignment.TopCenter)
                 )
             }
         }

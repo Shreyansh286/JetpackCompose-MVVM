@@ -23,6 +23,8 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
@@ -54,6 +56,7 @@ fun SettingScreen(
 ) {
     var selectedUnit by remember { mutableStateOf("SATS") }
     var selectedFiat by remember { mutableStateOf(selectedCountryData?.currencyCode) }
+    val snackbarHostState = remember { SnackbarHostState() }
 
     // Observe the result from UnitListScreen
     val unitResult = navController.currentBackStackEntry
@@ -64,6 +67,11 @@ fun SettingScreen(
     val fiatResult = navController.currentBackStackEntry
         ?.savedStateHandle
         ?.get<String>(SELECTED_FIAT_KEY)
+
+    val displayAmountResult = navController.currentBackStackEntry
+        ?.savedStateHandle
+        ?.get<String>("display_amount")
+
     // Update the state when a new Unit value is received
     LaunchedEffect(unitResult) {
         unitResult?.let {
@@ -80,7 +88,16 @@ fun SettingScreen(
             navController.currentBackStackEntry?.savedStateHandle?.remove<String>(SELECTED_FIAT_KEY)
         }
     }
+
+    LaunchedEffect(displayAmountResult) {
+        displayAmountResult?.let {
+            snackbarHostState.showSnackbar(it)
+            navController.currentBackStackEntry?.savedStateHandle?.remove<String>("display_amount")
+        }
+    }
+
     Scaffold(
+        snackbarHost = { SnackbarHost(snackbarHostState) },
         containerColor = Color.Black,
         topBar = {
             TopAppBar(
@@ -129,9 +146,9 @@ fun SettingScreen(
             )
 
             SettingNavigationCard(
-                title = "Currency Conversation ",
+                title = "Enter Amount",
                 icon = Icons.Default.AccountCircle,
-                onClick = { /* Handle Change account name click */ }
+                onClick = { navController.navigate(NavRoutes.enterAmountScreen(selectedUnit, selectedFiat.toString())) }
             )
 
             SettingNavigationCard(

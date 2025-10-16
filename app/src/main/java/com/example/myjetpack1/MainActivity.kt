@@ -14,6 +14,7 @@ import androidx.navigation.navArgument
 import com.example.myjetpack1.model.CountryDataItem
 import com.example.myjetpack1.ui.NavRoutes
 import com.example.myjetpack1.ui.screens.CountryScreen
+import com.example.myjetpack1.ui.screens.EnterAmountScreen
 import com.example.myjetpack1.ui.screens.FiatListScreen
 import com.example.myjetpack1.ui.screens.SettingScreen
 import com.example.myjetpack1.ui.screens.UnitListScreen
@@ -70,5 +71,22 @@ fun AppNavigation() {
             FiatListScreen(navController = navController)
         }
 
+        composable(
+            route = NavRoutes.ENTER_AMOUNT_ROUTE,
+            arguments = listOf(
+                navArgument("selectedUnit") { type = NavType.StringType },
+                navArgument("selectedFiat") { type = NavType.StringType },
+            )
+        ) { backStackEntry ->
+            val selectedUnit = backStackEntry.arguments?.getString("selectedUnit")
+            val selectedFiat = backStackEntry.arguments?.getString("selectedFiat")
+
+            EnterAmountScreen(
+                navController = navController,
+                selectedUnit = selectedUnit,
+                selectedFiat = selectedFiat,
+                onNavigateBack = { navController.popBackStack() }
+            )
+        }
     }
 }
